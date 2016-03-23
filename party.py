@@ -66,7 +66,7 @@ class Party:
 
     @staticmethod
     def default_type_document():
-        return '05'
+        return ''
         
     @fields.depends('type_document', 'vat_number')
     def on_change_type_document(self):
@@ -78,15 +78,34 @@ class Party:
         
         return res
 
+    @staticmethod
+    def default_contribuyente_especial():
+        return False
+        
+    @staticmethod
+    def default_mandatory_accounting():
+        return 'NO'
+        
+    """
     @fields.depends('type_document', 'vat_number')
     def on_change_vat_number(self):
-        if self.vat_number:
-            res={}
-            valido = self.pre_validate()
-        if valido == None:
+        if self.type_document == '':
             res ['vat_number']= self.vat_number
-        return res
-        
+            return res
+        elif self.type_document == '06':
+            res ['vat_number']= self.vat_number
+            return res
+        elif self.type_document == '07':
+            res ['vat_number']= self.vat_number
+            return res
+        else:
+            if self.vat_number:
+                res={}
+                valido = self.pre_validate()
+            if valido == None:
+                res ['vat_number']= self.vat_number
+            return res
+    """ 
     @classmethod
     def search_rec_name(cls, name, clause):
         parties = cls.search([
