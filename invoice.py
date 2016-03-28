@@ -3,7 +3,8 @@
 
 from trytond.model import ModelView, fields
 from trytond.pool import PoolMeta, Pool
-
+from trytond.report import Report
+from decimal import Decimal
 __all__ = ['Invoice', 'InvoiceReport']
         
 __metaclass__ = PoolMeta
