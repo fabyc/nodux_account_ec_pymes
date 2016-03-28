@@ -19,4 +19,5 @@ def register():
     Pool.register(
         BalanceSheet,
         IncomeStatement,
+        InvoiceReport,
         module='nodux_account_ec_pymes', type_='report')

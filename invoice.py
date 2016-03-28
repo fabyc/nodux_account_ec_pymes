@@ -4,7 +4,7 @@
 from trytond.model import ModelView, fields
 from trytond.pool import PoolMeta, Pool
 
-__all__ = ['Invoice']
+__all__ = ['Invoice', 'InvoiceReport']
         
 __metaclass__ = PoolMeta
 
@@ -19,3 +19,30 @@ class Invoice:
     def __setup__(cls):
         super(Invoice, cls).__setup__()
        
+class InvoiceReport(Report):
+    __name__ = 'account.invoice'
+    
+    @classmethod
+    def parse(cls, report, records, data, localcontext):
+        pool = Pool()
+        User = pool.get('res.user')
+        Invoice = pool.get('account.invoice')
+
+        invoice = records[0]
+        
+        localcontext['descuento'] = cls._get_descuento(Invoice, invoice)
+
+        return super(InvoiceReport, cls).parse(report, records, data,
+                localcontext=localcontext)              
+        
+    @classmethod
+    def _get_descuento(cls, Invoice, invoice):
+        descuento = Decimal(0.00)
+        descuento_parcial = Decimal(0.00)
+                
+        for line in invoice.lines:
+            descuento_parcial = Decimal(line.product.template.list_price - line.unit_price)
+            descuento = descuento + descuento_parcial
+            
+        return descuento
+                 
