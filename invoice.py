@@ -80,8 +80,8 @@ class InvoiceReport(Report):
                  
     @classmethod
     def _get_subtotal_0(cls, Invoice, invoice):
-        subtotal0 = 0.00
-        subtotal12 = 0.00
+        subtotal0 = Decimal(0.00)
+        subtotal12 = Decimal(0.00)
         pool = Pool()
         Taxes1 = pool.get('product.category-customer-account.tax')
         Taxes2 = pool.get('product.template-customer-account.tax')
