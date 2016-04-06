@@ -36,13 +36,6 @@ class Party:
             'required': Eval('contribuyente_especial',True),
             }, help="Contribuyente Especial Nro.")
     
-    vat_number = fields.Char('VAT Number', help="Value Added Tax number",
-        states={
-            'readonly': Eval('type_document')=='07',
-            'required': Bool(Eval('vat_country')),
-            },
-        depends=['active', 'vat_country'])
-        
     type_document = fields.Selection([
                 ('', ''),
                 ('04', 'RUC'),
