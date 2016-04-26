@@ -20,3 +20,6 @@ def register():
         IncomeStatement,
         InvoiceReport,
         module='nodux_account_ec_pymes', type_='report')
+    Pool.register(
+        CreditInvoice,
+        module='nodux_account_ec_pymes', type_='wizard')
