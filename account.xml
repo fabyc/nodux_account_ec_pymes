@@ -15,7 +15,6 @@ this repository contains the full copyright notices and license terms. -->
             <field name="model">account.account.type,-1</field>
             <field name="action" ref="report_balance_sheet"/>
         </record>
-
         <!-- Income Statement -->
         <record model="ir.action.report" id="report_income_statement">
             <field name="name">Income Statement</field>
@@ -28,41 +27,41 @@ this repository contains the full copyright notices and license terms. -->
             <field name="model">account.account.type,-1</field>
             <field name="action" ref="report_income_statement"/>
         </record>
-        
+
         <!--Ocultar del menu Open Third Party Balance-->
         <record model="ir.ui.menu" id="account.menu_third_party_balance">
             <field name="active" eval="False"/>
         </record>
-        
+
         <!--Ocultar del menu Open Aged Balance-->
         <record model="ir.ui.menu" id="account.menu_aged_balance">
-            <field name="active" eval="False"/>
+            <field name="active" eval="True"/>
         </record>
-        
+
         <!--Ocultar del menu General Journal-->
         <record model="ir.ui.menu" id="account.menu_print_general_journal">
             <field name="active" eval="False"/>
         </record>
-        
+
         <!-- Ocultar Trial Balance-->
         <record model="ir.ui.menu" id="account.menu_print_trial_balance">
             <field name="active" eval="False"/>
         </record>
-        
+
         <!--Ocultar Trial General Ledger -->
         <record model="ir.ui.menu" id="account.menu_print_general_ledger">
             <field name="active" eval="False"/>
         </record>
-        
+
         <!--Ocultar menu regla de impuestos -->
         <record model="ir.ui.menu" id="account.menu_tax_rule_template_form">
             <field name="active" eval="False"/>
         </record>
-        
+
         <record model="ir.ui.menu" id="account.menu_tax_rule_form">
             <field name="active" eval="False"/>
         </record>
-        
+
         <!--Ocultar menu vistas de libro diario-->
         <record model="ir.ui.menu" id="account.menu_journal_view_form">
             <field name="active" eval="False"/>

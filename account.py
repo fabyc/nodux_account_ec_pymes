@@ -13,6 +13,9 @@ from trytond.pyson import Eval, PYSONEncoder
 from trytond.transaction import Transaction
 from trytond.pool import Pool, PoolMeta
 from trytond.modules.company import CompanyReport
+import pytz
+from datetime import datetime,timedelta
+import time
 
 __all__ = ['BalanceSheet', 'IncomeStatement']
          
@@ -31,7 +34,19 @@ class BalanceSheet(Report):
 
     @classmethod
     def parse(cls, report, objects, data, localcontext):
-        localcontext['company'] = Transaction().context.get('company.rec_name')
+        pool = Pool()
+        User = pool.get('res.user')
+        
+        user = User(Transaction().user)
+        
+        if user.company.timezone:
+            timezone = pytz.timezone(user.company.timezone)
+            dt = datetime.now()
+            hora = datetime.astimezone(dt.replace(tzinfo=pytz.utc), timezone)
+
+        localcontext['fecha'] = hora.strftime('%d/%m/%Y')
+        localcontext['hora'] = hora.strftime('%H:%M:%S')
+        localcontext['company'] = user.company
         localcontext['date'] = Transaction().context.get('date')
         return super(BalanceSheet, cls).parse(report, objects, data, localcontext)
 
@@ -42,7 +57,17 @@ class IncomeStatement(Report):
 
     @classmethod
     def parse(cls, report, objects, data, localcontext):
-        localcontext['company'] = Transaction().context.get('company.rec_name')
+        pool = Pool()
+        User = pool.get('res.user')
+        user = User(Transaction().user)
+        if user.company.timezone:
+            timezone = pytz.timezone(user.company.timezone)
+            dt = datetime.now()
+            hora = datetime.astimezone(dt.replace(tzinfo=pytz.utc), timezone)
+
+        localcontext['fecha'] = hora.strftime('%d/%m/%Y')
+        localcontext['hora'] = hora.strftime('%H:%M:%S')
+        localcontext['company'] = user.company
         localcontext['date'] = Transaction().context.get('date')
         return super(IncomeStatement, cls).parse(report, objects, data, localcontext)
 

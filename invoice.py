@@ -55,6 +55,7 @@ class InvoiceReport(Report):
         if invoice.total_amount:
             d = str(invoice.total_amount)
             decimales = d[-2:]
+        """
         if sale:
             for s in sale:
                 if s.tipo_p:
@@ -63,6 +64,8 @@ class InvoiceReport(Report):
                     tipo = None
         else:
             tipo = None
+        """
+        tipo = None
         if invoice.payment_term:
             term = invoice.payment_term
             termlines = TermLines.search([('payment', '=', term.id)])
