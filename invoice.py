@@ -80,6 +80,7 @@ class InvoiceReport(Report):
             
         localcontext['descuento'] = cls._get_descuento(Invoice, invoice)
         localcontext['subtotal_12'] = cls._get_subtotal_12(Invoice, invoice)
+        localcontext['subtotal_14'] = cls._get_subtotal_14(Invoice, invoice)
         localcontext['subtotal_0'] = cls._get_subtotal_0(Invoice, invoice)
         localcontext['forma'] = forma
         localcontext['tipo'] = tipo
@@ -114,6 +115,35 @@ class InvoiceReport(Report):
             descuento = descuento + descuento_parcial
             
         return descuento
+        
+    @classmethod
+    def _get_subtotal_14(cls, Invoice, invoice):
+        subtotal0 = Decimal(0.00)
+        subtotal14 = Decimal(0.00)
+        pool = Pool()
+        Taxes1 = pool.get('product.category-customer-account.tax')
+        Taxes2 = pool.get('product.template-customer-account.tax')
+        
+        for line in invoice.lines:
+            taxes1 = Taxes1.search([('category','=', line.product.category)])
+            taxes2 = Taxes2.search([('product','=', line.product)])
+            taxes3 = Taxes2.search([('product','=', line.product.template)])
+        
+            if taxes1:
+                for t in taxes1:
+                    if str('{:.0f}'.format(t.tax.rate*100)) == '14':
+                        subtotal14= subtotal14 + (line.amount)
+            elif taxes2:
+                for t in taxes2:
+                    if str('{:.0f}'.format(t.tax.rate*100)) == '14':
+                        subtotal14= subtotal14 + (line.amount)
+            elif taxes3:
+                for t in taxes3:
+                    if str('{:.0f}'.format(t.tax.rate*100)) == '14':
+                        subtotal14= subtotal14 + (line.amount)
+                        
+            
+        return subtotal14
         
     @classmethod
     def _get_subtotal_12(cls, Invoice, invoice):
