@@ -30,7 +30,7 @@ this repository contains the full copyright notices and license terms. -->
 
         <!--Ocultar del menu Open Third Party Balance-->
         <record model="ir.ui.menu" id="account.menu_third_party_balance">
-            <field name="active" eval="False"/>
+            <field name="active" eval="True"/>
         </record>
 
         <!--Ocultar del menu Open Aged Balance-->

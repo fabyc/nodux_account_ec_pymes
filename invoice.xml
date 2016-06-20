@@ -23,6 +23,5 @@ this repository contains the full copyright notices and license terms. -->
             <field name="user" ref="res.user_admin"/>
             <field name="group" ref="group_sale_return"/>
         </record>
-        
     </data>
 </tryton>
