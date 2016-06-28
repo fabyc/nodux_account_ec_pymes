@@ -18,8 +18,6 @@ from datetime import datetime,timedelta
 import time
 
 __all__ = ['BalanceSheet', 'IncomeStatement']
-         
-__metaclass__ = PoolMeta
 
 def fmt_acc(val):
     # Format account number function
@@ -29,16 +27,16 @@ def fmt_acc(val):
 
 
 class BalanceSheet(Report):
-    'Sheet Balance'
+    __metaclass__ = PoolMeta
     __name__ = 'account.balance_sheet'
 
     @classmethod
     def parse(cls, report, objects, data, localcontext):
         pool = Pool()
         User = pool.get('res.user')
-        
+
         user = User(Transaction().user)
-        
+
         if user.company.timezone:
             timezone = pytz.timezone(user.company.timezone)
             dt = datetime.now()
@@ -52,7 +50,7 @@ class BalanceSheet(Report):
 
 
 class IncomeStatement(Report):
-    'Income Statement'
+    __metaclass__ = PoolMeta
     __name__ = 'account.income_statement'
 
     @classmethod
@@ -70,5 +68,3 @@ class IncomeStatement(Report):
         localcontext['company'] = user.company
         localcontext['date'] = Transaction().context.get('date')
         return super(IncomeStatement, cls).parse(report, objects, data, localcontext)
-
-
