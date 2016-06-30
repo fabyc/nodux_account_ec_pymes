@@ -39,36 +39,37 @@ class Invoice:
 class InvoiceReport(Report):
     __metaclass__ = PoolMeta
     __name__ = 'account.invoice'
+
     @classmethod
-    def parse(cls, report, records, data, localcontext):
+    def get_context(cls, records, data):
         pool = Pool()
         User = pool.get('res.user')
         Invoice = pool.get('account.invoice')
         Sale = pool.get('sale.sale')
         invoice = records[0]
         sale = Sale.search([('reference','=', invoice.description)])
-        print "La venta ", sale
         TermLines = pool.get('account.invoice.payment_term.line')
+        TermLinesRela = pool.get('account.invoice.payment_term.line.relativedelta')
         cont = 0
+        context = Transaction().context
+
+        report_context = super(InvoiceReport, cls).get_context(
+            records, data)
+
         if invoice.total_amount:
             d = str(invoice.total_amount)
             decimales = d[-2:]
-        """
-        if sale:
-            for s in sale:
-                if s.tipo_p:
-                    tipo = (s.tipo_p).upper()
-                else:
-                    tipo = None
-        else:
-            tipo = None
-        """
+
         tipo = None
+
         if invoice.payment_term:
             term = invoice.payment_term
             termlines = TermLines.search([('payment', '=', term.id)])
+
             for t in termlines:
-                t_f = t
+                termlinesrela = TermLinesRela.search([('line', '=', t.id)])
+                for t_l_r in termlinesrela:
+                    t_f = t_l_r
                 cont += 1
 
         if cont == 1 and t_f.days == 0:
@@ -76,17 +77,16 @@ class InvoiceReport(Report):
         else:
             forma = 'CREDITO'
 
-        localcontext['descuento'] = cls._get_descuento(Invoice, invoice)
-        localcontext['subtotal_12'] = cls._get_subtotal_12(Invoice, invoice)
-        localcontext['subtotal_14'] = cls._get_subtotal_14(Invoice, invoice)
-        localcontext['subtotal_0'] = cls._get_subtotal_0(Invoice, invoice)
-        localcontext['forma'] = forma
-        localcontext['tipo'] = tipo
-        localcontext['amount2words']=cls._get_amount_to_pay_words(Invoice, invoice)
-        localcontext['decimales'] = decimales
-        localcontext['lineas'] = cls._get_lineas(Invoice, invoice)
-        return super(InvoiceReport, cls).parse(report, records, data,
-                localcontext=localcontext)
+        report_context['descuento'] = cls._get_descuento(Invoice, invoice)
+        report_context['subtotal_12'] = cls._get_subtotal_12(Invoice, invoice)
+        report_context['subtotal_14'] = cls._get_subtotal_14(Invoice, invoice)
+        report_context['subtotal_0'] = cls._get_subtotal_0(Invoice, invoice)
+        report_context['forma'] = forma
+        report_context['tipo'] = tipo
+        report_context['amount2words']=cls._get_amount_to_pay_words(Invoice, invoice)
+        report_context['decimales'] = decimales
+        report_context['lineas'] = cls._get_lineas(Invoice, invoice)
+        return report_context
 
     @classmethod
     def _get_amount_to_pay_words(cls, Invoice, invoice):
@@ -123,7 +123,10 @@ class InvoiceReport(Report):
         Taxes2 = pool.get('product.template-customer-account.tax')
 
         for line in invoice.lines:
-            taxes1 = Taxes1.search([('category','=', line.product.category)])
+            print "categories ", line.product.categories
+            if line.product.categories:
+                for lpc in line.product.categories:
+                    taxes1 = Taxes1.search([('category','=', lpc)])
             taxes2 = Taxes2.search([('product','=', line.product)])
             taxes3 = Taxes2.search([('product','=', line.product.template)])
 
@@ -152,7 +155,10 @@ class InvoiceReport(Report):
         Taxes2 = pool.get('product.template-customer-account.tax')
 
         for line in invoice.lines:
-            taxes1 = Taxes1.search([('category','=', line.product.category)])
+            print "categories ", line.product.categories
+            if line.product.categories:
+                for lpc in line.product.categories:
+                    taxes1 = Taxes1.search([('category','=', lpc)])
             taxes2 = Taxes2.search([('product','=', line.product)])
             taxes3 = Taxes2.search([('product','=', line.product.template)])
 
@@ -181,7 +187,10 @@ class InvoiceReport(Report):
         Taxes2 = pool.get('product.template-customer-account.tax')
 
         for line in invoice.lines:
-            taxes1 = Taxes1.search([('category','=', line.product.category)])
+            print "categories ", line.product.categories
+            if line.product.categories:
+                for lpc in line.product.categories:
+                    taxes1 = Taxes1.search([('category','=', lpc)])
             taxes2 = Taxes2.search([('product','=', line.product)])
             taxes3 = Taxes2.search([('product','=', line.product.template)])
 
