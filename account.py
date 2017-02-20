@@ -18,7 +18,7 @@ from datetime import datetime,timedelta
 import time
 
 __all__ = ['BalanceSheet', 'IncomeStatement']
-         
+
 __metaclass__ = PoolMeta
 
 def fmt_acc(val):
@@ -26,7 +26,6 @@ def fmt_acc(val):
     fmt = '%s' + '0' * (8 - len(str(val)))
     account_code_fmt = int(fmt % val)
     return account_code_fmt
-
 
 class BalanceSheet(Report):
     'Sheet Balance'
@@ -36,9 +35,9 @@ class BalanceSheet(Report):
     def parse(cls, report, objects, data, localcontext):
         pool = Pool()
         User = pool.get('res.user')
-        
+
         user = User(Transaction().user)
-        
+
         if user.company.timezone:
             timezone = pytz.timezone(user.company.timezone)
             dt = datetime.now()
@@ -70,5 +69,3 @@ class IncomeStatement(Report):
         localcontext['company'] = user.company
         localcontext['date'] = Transaction().context.get('date')
         return super(IncomeStatement, cls).parse(report, objects, data, localcontext)
-
-

@@ -11,8 +11,8 @@ def register():
     Pool.register(
         Invoice,
         Party,
-        BankAccountNumber, 
-        Company, 
+        BankAccountNumber,
+        Company,
         Template,
         module='nodux_account_ec_pymes', type_='model')
     Pool.register(
