@@ -3,12 +3,6 @@
 this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
-        <!-- view pymes-->
-        <!--record model="ir.ui.view" id="party_view_tree">
-            <field name="model">party.party</field>
-            <field name="inherit" ref="party.party_view_tree"/>
-            <field name="name">party_tree</field>
-        </record-->
 
         <record model="ir.ui.view" id="party_view_form">
             <field name="model">party.party</field>
