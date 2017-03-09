@@ -7,7 +7,7 @@ from trytond.pyson import Eval
 from trytond.pyson import Id
 from trytond.pyson import Bool, Eval
 
-__all__ = ['BankAccountNumber', 'Company']
+__all__ = ['Party', 'BankAccountNumber', 'Company']
 __metaclass__ = PoolMeta
 
 STATES = {
@@ -16,6 +16,25 @@ STATES = {
 }
 DEPENDS = ['active']
 
+class Party:
+    __name__ = 'party.party'
+
+    mandatory_accounting = fields.Selection([
+            ('',''),
+            ('SI', 'Si'),
+            ('NO', 'No'),
+            ], 'Mandatory Accounting', states={
+                'invisible': Eval('type_document')!='04',
+            }
+            )
+    contribuyente_especial = fields.Boolean(u'Contribuyente especial', states={
+            'invisible': Eval('mandatory_accounting') != 'SI',
+            }, help="Seleccione solo si es contribuyente especial"
+        )
+    contribuyente_especial_nro = fields.Char('Nro. Resolucion', states={
+            'invisible': ~Eval('contribuyente_especial',True),
+            'required': Eval('contribuyente_especial',True),
+            }, help="Contribuyente Especial Nro.")
 
 class BankAccountNumber:
     __name__ = 'bank.account.number'
