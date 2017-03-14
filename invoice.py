@@ -65,7 +65,6 @@ class InvoiceReport(Report):
         if invoice.payment_term:
             term = invoice.payment_term
             termlines = TermLines.search([('payment', '=', term.id)])
-
             for t in termlines:
                 termlinesrela = TermLinesRela.search([('line', '=', t.id)])
                 for t_l_r in termlinesrela:
@@ -123,10 +122,8 @@ class InvoiceReport(Report):
         Taxes2 = pool.get('product.template-customer-account.tax')
 
         for line in invoice.lines:
-            print "categories ", line.product.categories
-            if line.product.categories:
-                for lpc in line.product.categories:
-                    taxes1 = Taxes1.search([('category','=', lpc)])
+            if line.product.account_category:
+                taxes1 = Taxes1.search([('category','=', line.product.account_category)])
             taxes2 = Taxes2.search([('product','=', line.product)])
             taxes3 = Taxes2.search([('product','=', line.product.template)])
 
@@ -155,10 +152,8 @@ class InvoiceReport(Report):
         Taxes2 = pool.get('product.template-customer-account.tax')
 
         for line in invoice.lines:
-            print "categories ", line.product.categories
-            if line.product.categories:
-                for lpc in line.product.categories:
-                    taxes1 = Taxes1.search([('category','=', lpc)])
+            if line.product.account_category:
+                taxes1 = Taxes1.search([('category','=', line.product.account_category)])
             taxes2 = Taxes2.search([('product','=', line.product)])
             taxes3 = Taxes2.search([('product','=', line.product.template)])
 
@@ -187,10 +182,8 @@ class InvoiceReport(Report):
         Taxes2 = pool.get('product.template-customer-account.tax')
 
         for line in invoice.lines:
-            print "categories ", line.product.categories
-            if line.product.categories:
-                for lpc in line.product.categories:
-                    taxes1 = Taxes1.search([('category','=', lpc)])
+            if line.product.account_category:
+                taxes1 = Taxes1.search([('category','=', line.product.account_category)])
             taxes2 = Taxes2.search([('product','=', line.product)])
             taxes3 = Taxes2.search([('product','=', line.product.template)])
 
