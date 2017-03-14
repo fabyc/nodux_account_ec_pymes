@@ -31,7 +31,7 @@ class BalanceSheet(Report):
     __name__ = 'account.balance_sheet'
 
     @classmethod
-    def parse(cls, report, objects, data, localcontext):
+    def get_context(cls, records, data):
         pool = Pool()
         User = pool.get('res.user')
 
@@ -41,12 +41,13 @@ class BalanceSheet(Report):
             timezone = pytz.timezone(user.company.timezone)
             dt = datetime.now()
             hora = datetime.astimezone(dt.replace(tzinfo=pytz.utc), timezone)
+        report_context = super(BalanceSheet, cls).get_context(records, data)
 
-        localcontext['fecha'] = hora.strftime('%d/%m/%Y')
-        localcontext['hora'] = hora.strftime('%H:%M:%S')
-        localcontext['company'] = user.company
-        localcontext['date'] = Transaction().context.get('date')
-        return super(BalanceSheet, cls).parse(report, objects, data, localcontext)
+        report_context['fecha'] = hora.strftime('%d/%m/%Y')
+        report_context['hora'] = hora.strftime('%H:%M:%S')
+        report_context['company'] = user.company
+        report_context['date'] = Transaction().context.get('date')
+        return report_context
 
 
 class IncomeStatement(Report):
@@ -54,7 +55,7 @@ class IncomeStatement(Report):
     __name__ = 'account.income_statement'
 
     @classmethod
-    def parse(cls, report, objects, data, localcontext):
+    def get_context(cls, records, data):
         pool = Pool()
         User = pool.get('res.user')
         user = User(Transaction().user)
@@ -63,8 +64,10 @@ class IncomeStatement(Report):
             dt = datetime.now()
             hora = datetime.astimezone(dt.replace(tzinfo=pytz.utc), timezone)
 
-        localcontext['fecha'] = hora.strftime('%d/%m/%Y')
-        localcontext['hora'] = hora.strftime('%H:%M:%S')
-        localcontext['company'] = user.company
-        localcontext['date'] = Transaction().context.get('date')
-        return super(IncomeStatement, cls).parse(report, objects, data, localcontext)
+        report_context = super(IncomeStatement, cls).get_context(records, data)
+
+        report_context['fecha'] = hora.strftime('%d/%m/%Y')
+        report_context['hora'] = hora.strftime('%H:%M:%S')
+        report_context['company'] = user.company
+        report_context['date'] = Transaction().context.get('date')
+        return report_context
